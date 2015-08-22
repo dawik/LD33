@@ -1,0 +1,136 @@
+<!doctype html> 
+
+<html lang="en"> 
+  <head> 
+    <meta charset="UTF-8" />
+    <title>YOU ARE THE MONSTER - Ludum Dare 33 - WIP</title>
+    <script type="text/javascript" src="../lib/phaser.min.js"></script>
+    <style type="text/css">
+body {
+  margin: 0;
+}
+
+    </style>
+  </head>
+  <body>
+
+    <script type="text/javascript">
+
+var game = new Phaser.Game(window.innerWidth, window.innerHeight, Phaser.AUTO, '', { preload: preload, create: create, update: update });
+
+
+
+function preload() 
+{
+  this.game.physics.startSystem(Phaser.Physics.ARCADE);
+
+  game.load.atlasJSONHash(
+      'ytm-atlas',
+      '../assets/ytm-atlas.png',
+      '../assets/ytm-atlas'
+      );
+  this.load.tilemap('level1', '../levels/level1.json', null, Phaser.Tilemap.TILED_JSON);
+  this.load.image('ytm-tiles', '../assets/ytm-tiles.png');
+}
+
+function create() 
+{
+  game.physics.startSystem(Phaser.Physics.ARCADE);
+  this.game.stage.backgroundColor = '#0000CC';
+  this.map = this.game.add.tilemap('level1');
+  this.map.addTilesetImage('ytm-tiles', 'ytm-tiles');
+
+  //have the game centered horizontally
+  this.scale.pageAlignHorizontally = true;
+  this.scale.pageAlignVertically = true;
+
+
+  //create layer
+  this.backgroundlayer = this.map.createLayer('backgroundLayer');
+  //this.blockedLayer = this.map.createLayer('blockedLayer');
+
+  this.createItems = function() {
+    //create items
+    this.items = this.game.add.group();
+    this.items.enableBody = true;
+    var item;    
+    result = this.findObjectsByType('item', this.map, 'objectsLayer');
+    result.forEach(function(element){
+      this.createFromTiledObject(element, this.items);
+    }, this);
+  };
+  //find objects in a Tiled layer that containt a property called "type" equal to a certain value
+  this.findObjectsByType = function(type, map, layer) {
+    var result = new Array();
+    map.objects[layer].forEach(function(element){
+      if(element.type === type) {
+        console.log("Type sought", type, "Type found", element.type, element.type);
+        //Phaser uses top left, Tiled bottom left so we have to adjust
+        //also keep in mind that the cup images are a bit smaller than the tile which is 16x16
+        //so they might not be placed in the exact position as in Tiled
+        element.y -= map.tileHeight;
+        result.push(element);
+      }      
+    });
+    return result;
+  };
+  //create a sprite from an object
+  this.createFromTiledObject = function(element, group) {
+    var sprite = group.create(element.x, element.y, element.sprite);
+
+    //copy all properties to the sprite
+    Object.keys(element.properties).forEach(function(key){
+      sprite[key] = element[key];
+    });
+  }
+
+  this.createItems();
+
+
+  //create player
+  var result = this.findObjectsByType('Player', this.map, 'objectsLayer')
+
+    if (result)
+      console.log("Found player starting position", result, this.map);
+    else
+      throw "Myeh"
+
+        //we know there is just one result
+        //this.player = this.game.add.sprite(result[0].x, result[0].y, 'ytm-atlas', 'iceman-front.png');
+        this.player = this.game.add.sprite(0, 0, 'ytm-atlas', 'iceman-front.png');
+  this.game.physics.arcade.enable(this.player);
+
+  //the camera will follow the player in the world
+  this.game.camera.follow(this.player);
+
+  //move player with cursor keys
+  this.cursors = this.game.input.keyboard.createCursorKeys();
+}
+
+function update() 
+{
+  //player movement
+  this.player.body.velocity.y = 0;
+  this.player.body.velocity.x = 0;
+
+  if(this.cursors.up.isDown) {
+    this.player.body.velocity.y -= 250;
+  }
+  else if(this.cursors.down.isDown) {
+    this.player.body.velocity.y += 250;
+  }
+  if(this.cursors.left.isDown) {
+    this.player.body.velocity.x -= 250;
+  }
+  else if(this.cursors.right.isDown) {
+    this.player.body.velocity.x += 250;
+  }
+
+  this.game.physics.arcade.collide(this.player, this.backgroundlayer);
+
+}
+    </script>
+
+  </body>
+
+</html>
