@@ -82,9 +82,10 @@ function create()
   tankers.enableBody = true;
 
   objects('Tanker', this.map, 'objectsLayer').forEach(function(tanker) {
-    var _t = tankers.create(tanker.x, tanker.y - (170/2), 'ytm-atlas', 'tanker.png');
+    var _t = tankers.create(tanker.x + 210, tanker.y - (170/2), 'ytm-atlas', 'tanker.png');
     _t.body.immovable = true;
     _t.body.setSize(_t.body.width, 78, 0 , 91);
+    _t.anchor.setTo(0.5);
   });
 
   //create player
@@ -92,7 +93,6 @@ function create()
 
     this.player = this.game.add.sprite(playerStart[0].x, playerStart[0].y, 'ytm-atlas', 'iceman-front.png');
 
-  this.player_colliding = false;
   this.player.anchor.setTo(0.5);
   this.player.animations.add('left', ['iceman-side.png', 'iceman-front.png'], 10, true);
   this.game.physics.arcade.enable(this.player);
@@ -107,9 +107,18 @@ function create()
 tanker_collision_callback = function(body1, arg2)
 {
   console.log(arg2);
-  shake.shake(20, arg2);
-  if (!this.player_colliding)
+  if (!arg2.destruction)
+  {
+    arg2.destruction = true;
     this.splash.play();
+    var tween = game.add.tween(arg2).to({ angle: -5, y: arg2.body.y - 25}, 1000, "Quart.easeOut", true);
+    shake.shake(20, arg2);
+
+    tween.onComplete.add(function() {
+      arg2.destroy(true);
+    }
+    );
+  }
 }
 
 function update() 
@@ -135,10 +144,7 @@ function update()
 
   this.game.physics.arcade.collide(this.player, this.blockedLayer);
 
-  if (this.game.physics.arcade.collide(this.player, tankers, tanker_collision_callback, null, this))
-    this.player_colliding = true;
-  else
-    this.player_colliding = false;
+  this.game.physics.arcade.overlap(this.player, tankers, tanker_collision_callback, null, this);
 }
     </script>
 

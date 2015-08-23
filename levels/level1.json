@@ -45,8 +45,72 @@
                  "type":"Tanker",
                  "visible":true,
                  "width":420,
-                 "x":415,
-                 "y":315
+                 "x":533,
+                 "y":805
+                }, 
+                {
+                 "gid":11,
+                 "height":170,
+                 "id":10,
+                 "name":"",
+                 "properties":
+                    {
+
+                    },
+                 "rotation":0,
+                 "type":"Tanker",
+                 "visible":true,
+                 "width":420,
+                 "x":523,
+                 "y":1001
+                }, 
+                {
+                 "gid":11,
+                 "height":170,
+                 "id":11,
+                 "name":"",
+                 "properties":
+                    {
+
+                    },
+                 "rotation":0,
+                 "type":"Tanker",
+                 "visible":true,
+                 "width":420,
+                 "x":693,
+                 "y":570
+                }, 
+                {
+                 "gid":11,
+                 "height":170,
+                 "id":12,
+                 "name":"",
+                 "properties":
+                    {
+
+                    },
+                 "rotation":0,
+                 "type":"Tanker",
+                 "visible":true,
+                 "width":420,
+                 "x":229,
+                 "y":339
+                }, 
+                {
+                 "gid":11,
+                 "height":170,
+                 "id":13,
+                 "name":"",
+                 "properties":
+                    {
+
+                    },
+                 "rotation":0,
+                 "type":"Tanker",
+                 "visible":true,
+                 "width":420,
+                 "x":99,
+                 "y":1188
                 }],
          "opacity":1,
          "type":"objectgroup",
@@ -66,7 +130,7 @@
          "x":0,
          "y":0
         }],
- "nextobjectid":7,
+ "nextobjectid":14,
  "orientation":"orthogonal",
  "properties":
     {
