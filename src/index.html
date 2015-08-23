@@ -20,6 +20,8 @@ canvas {
 
     <script type="text/javascript">
 
+var intro_track;
+
 Game = {};
 
 Game.Intro = function(){};
@@ -29,7 +31,8 @@ Game.Intro.prototype =
 {
   preload: function()
   {
-    this.loading_text = game.add.text(0, 0, "loading...",  {fill: "#ffffff"});
+    this.loading_text = this.game.add.text(game.world.centerX, game.world.centerY, "loading...",  {fill: "#ffffff"});
+    this.loading_text.anchor.setTo(0.5);
     this.scale.scaleMode = Phaser.ScaleManager.SHOW_ALL;
     this.scale.pageAligNHorizontally = true;
     this.scale.pageAlignVertically = true;
@@ -61,9 +64,9 @@ Game.Intro.prototype =
       });
     });
 
-    var intro = this.game.add.audio('intro');
+    intro_track = this.game.add.audio('intro');
 
-    game.sound.setDecodedCallback(intro, function() { intro.loopFull(0.6)}, this);
+    game.sound.setDecodedCallback(intro_track, function() { intro_track.loopFull(0.6)}, this);
 
   },
 
@@ -72,6 +75,7 @@ Game.Intro.prototype =
     this.game.input.keyboard.onDownCallback = function(e)
     {
       this.game.input.keyboard.onDownCallback = undefined;
+      intro_track.stop();
       game.state.start("Play");
       console.log(e.keyCode);
     }
@@ -82,7 +86,8 @@ Game.Play.prototype =
 {
   preload: function()
   {
-    this.game.add.text(0, 0, "loading...",  {fill: "#ffffff"});
+    this.loading_text = this.game.add.text(game.world.centerX, game.world.centerY, "loading...",  {fill: "#ffffff"});
+    this.loading_text.anchor.setTo(0.5);
     this.scale.scaleMode = Phaser.ScaleManager.SHOW_ALL;
     this.scale.pageAlignHorizontally = true;
     this.scale.pageAlignVertically = true;
@@ -104,6 +109,7 @@ Game.Play.prototype =
 
   create: function() 
   {
+    this.loading_text.destroy(true);
     game.physics.startSystem(Phaser.Physics.ARCADE);
     game.camera.roundPx = false;
     this.game.stage.backgroundColor = '#0000CC';
