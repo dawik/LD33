@@ -5,6 +5,7 @@
     <meta charset="UTF-8" />
     <title>YOU ARE THE MONSTER - Ludum Dare 33 - WIP</title>
     <script type="text/javascript" src="../lib/phaser.min.js"></script>
+    <script type="text/javascript" src="../lib/Shake.js"></script>
     <style type="text/css">
 body {
   margin: 0;
@@ -23,12 +24,14 @@ var game = new Phaser.Game(640, 400, Phaser.AUTO, '', { preload: preload, create
 
 
 
+
 function preload() 
 {
-  this.scale.scaleMode = Phaser.ScaleManager.NO_SCALE;
+  this.scale.scaleMode = Phaser.ScaleManager.SHOW_ALL;
   this.scale.pageAlignHorizontally = true;
   this.scale.pageAlignVertically = true;
   game.world.setBounds(0,0,5000,2000);
+  game.stage.smoothed = false;
 
   this.game.physics.startSystem(Phaser.Physics.ARCADE);
 
@@ -55,12 +58,15 @@ objects = function(type, map, layer) {
 };
 
 var tankers;
+var shake;
 
 function create() 
 {
   game.physics.startSystem(Phaser.Physics.ARCADE);
   game.camera.roundPx = false;
   this.game.stage.backgroundColor = '#0000CC';
+  shake = new Phaser.Plugin.Shake(game);
+  game.plugins.add(shake);
 
   this.splash = this.add.audio('splash2');
   this.map = this.game.add.tilemap('level1');
@@ -84,7 +90,7 @@ function create()
   //create player
   var playerStart = objects('playerStart', this.map, 'objectsLayer')
 
-  this.player = this.game.add.sprite(playerStart[0].x, playerStart[0].y, 'ytm-atlas', 'iceman-front.png');
+    this.player = this.game.add.sprite(playerStart[0].x, playerStart[0].y, 'ytm-atlas', 'iceman-front.png');
 
   this.player_colliding = false;
   this.player.anchor.setTo(0.5);
@@ -98,11 +104,10 @@ function create()
   this.cursors = this.game.input.keyboard.createCursorKeys();
 }
 
-tanker_collision_callback = function(arg1, arg2, arg3)
+tanker_collision_callback = function(body1, arg2)
 {
-  //console.log(arg1, arg2, arg3);
-  console.log(arg1.body.height, arg1.body.width);
-  //console.log(arg1._bounds.bottomLeft.x, arg1._bounds.bottomRight.x);
+  console.log(arg2);
+  shake.shake(20, arg2);
   if (!this.player_colliding)
     this.splash.play();
 }
@@ -129,7 +134,8 @@ function update()
     this.player.animations.stop();
 
   this.game.physics.arcade.collide(this.player, this.blockedLayer);
-  if (this.game.physics.arcade.overlap(this.player, tankers, tanker_collision_callback, null, this))
+
+  if (this.game.physics.arcade.collide(this.player, tankers, tanker_collision_callback, null, this))
     this.player_colliding = true;
   else
     this.player_colliding = false;
