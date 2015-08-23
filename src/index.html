@@ -78,6 +78,7 @@ function create()
   objects('Tanker', this.map, 'objectsLayer').forEach(function(tanker) {
     var _t = tankers.create(tanker.x, tanker.y - (170/2), 'ytm-atlas', 'tanker.png');
     _t.body.immovable = true;
+    _t.body.setSize(_t.body.width, 78, 0 , 91);
   });
 
   //create player
@@ -100,6 +101,8 @@ function create()
 tanker_collision_callback = function(arg1, arg2, arg3)
 {
   //console.log(arg1, arg2, arg3);
+  console.log(arg1.body.height, arg1.body.width);
+  //console.log(arg1._bounds.bottomLeft.x, arg1._bounds.bottomRight.x);
   if (!this.player_colliding)
     this.splash.play();
 }
