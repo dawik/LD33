@@ -20,29 +20,165 @@ canvas {
 
     <script type="text/javascript">
 
-var game = new Phaser.Game(640, 400, Phaser.AUTO, '', { preload: preload, create: create, update: update });
+Game = {};
+
+Game.Intro = function(){};
+Game.Menu = function(){};
+Game.Play = function(){};
+Game.Intro.prototype = 
+{
+  preload: function()
+  {
+    this.loading_text = game.add.text(0, 0, "loading...",  {fill: "#ffffff"});
+    this.scale.scaleMode = Phaser.ScaleManager.SHOW_ALL;
+    this.scale.pageAlignHorizontally = true;
+    this.scale.pageAlignVertically = true;
+    game.world.setBounds(0,0,640,400);
+    this.load.image('icebergman', '../assets/icebergman-smaller.jpg');
+    this.load.script('pixelate', 'https://cdn.rawgit.com/photonstorm/phaser/master/filters/Pixelate.js');
+  },
+
+  create: function() 
+  {
+    this.game.stage.backgroundColor = '#0000CC';
+    var pixelate = game.add.filter('Pixelate');
+    this.loading_text.destroy(true);
+    var icebergman = this.game.add.sprite(0, 0, 'icebergman');
+    icebergman.filters = [pixelate];
+    pixelate.sizeX = 100;
+    pixelate.sizeY = 100;
+    var tween = game.add.tween(pixelate).to( { sizeX: 1, sizeY: 1 }, 5000, "Quad.easeInOut", true)
+    tween.onComplete.add(function(){
+      var text = this.game.add.text(game.world.centerX, 150, "You are Is-O...\nYour kin have been melted by global warming\nYou vow to exact revenge on the oil tankers\nplaguing your home waters\n",  {fill: "#ffffff", align:"center"});
+      text.anchor.setTo(0.5);
+      text.alpha = 0.1;
+      var text_tween = game.add.tween(text).to({ alpha: 1}, 4000, "Linear", true );
+      text_tween.onComplete.add(function() {
+        var start_text = game.add.text(320,300, "Use arrow keys to control Is-O\nPress any key to begin", { fill: "#ffffff", align:"center"});
+        start_text.anchor.setTo(0.5);
+        
+      });
+    });
+  },
+
+  update: function()
+  {
+    this.game.input.keyboard.onDownCallback = function(e)
+    {
+      this.game.input.keyboard.onDownCallback = undefined;
+      game.state.start("Play");
+      console.log(e.keyCode);
+    }
+  }
+}
+
+Game.Play.prototype = 
+{
+  preload: function()
+  {
+    this.game.add.text(0, 0, "loading...",  {fill: "#ffffff"});
+    this.scale.scaleMode = Phaser.ScaleManager.SHOW_ALL;
+    this.scale.pageAlignHorizontally = true;
+    this.scale.pageAlignVertically = true;
+    game.world.setBounds(0,0,5000,2000);
+    game.stage.smoothed = false;
+
+    this.game.physics.startSystem(Phaser.Physics.ARCADE);
+
+    game.load.atlasJSONHash(
+        'ytm-atlas',
+        '../assets/ytm-atlas.png',
+        '../assets/ytm-atlas.json'
+        );
+    this.load.tilemap('level1', '../levels/level1.json', null, Phaser.Tilemap.TILED_JSON);
+    this.load.image('ytm-tiles', '../assets/ytm-tiles.png');
+    this.load.audio('splash2', '../assets/splash2.mp3');
+  },
+
+  create: function() 
+  {
+    game.physics.startSystem(Phaser.Physics.ARCADE);
+    game.camera.roundPx = false;
+    this.game.stage.backgroundColor = '#0000CC';
+    shake = new Phaser.Plugin.Shake(game);
+    game.plugins.add(shake);
+
+    this.splash = this.add.audio('splash2');
+    this.map = this.game.add.tilemap('level1');
+    this.map.addTilesetImage('ytm-tiles', 'ytm-tiles');
+
+    //create layer
+    this.backgroundlayer = this.map.createLayer('backgroundLayer');
+    this.blockedLayer = this.map.createLayer('blockedLayer');
+
+    this.map.setCollisionBetween(1, 100000, true, this.blockedLayer);
+
+    tankers = this.add.group();
+    tankers.enableBody = true;
+
+    objects('Tanker', this.map, 'objectsLayer').forEach(function(tanker) {
+      var _t = tankers.create(tanker.x + 210, tanker.y - (170/2), 'ytm-atlas', 'tanker.png');
+      _t.body.immovable = true;
+      _t.body.setSize(_t.body.width, 60, 5 , 60);
+      _t.anchor.setTo(0.5);
+      numberOfTankers++;
+    });
+
+    text = game.add.text(10, 10, "Oil tankers: " + numberOfTankers, { font: "30px TheFont"} );
+    text.fixedToCamera = true;
+
+    //create player
+    var playerStart = objects('playerStart', this.map, 'objectsLayer')
+
+      this.player = this.game.add.sprite(playerStart[0].x, playerStart[0].y, 'ytm-atlas', 'iceman-front.png');
+
+    this.player.anchor.setTo(0.5);
+    this.player.animations.add('left', ['iceman-side.png', 'iceman-front.png'], 10, true);
+    this.game.physics.arcade.enable(this.player);
+
+    //the camera will follow the player in the world
+    this.game.camera.follow(this.player);
+
+    //move player with cursor keys
+    this.cursors = this.game.input.keyboard.createCursorKeys();
+  },
+
+  update: function()
+  {
+    //player movement
+    this.player.body.velocity.y = 0;
+    this.player.body.velocity.x = 0;
+
+    if(this.cursors.up.isDown) {
+      this.player.body.velocity.y -= 250;
+    }
+    else if(this.cursors.down.isDown) {
+      this.player.body.velocity.y += 250;
+    }
+    if(this.cursors.left.isDown) {
+      this.player.body.velocity.x -= 250;
+      //this.player.animations.play('left');
+    }
+    else if(this.cursors.right.isDown) {
+      this.player.body.velocity.x += 250;
+    } else
+      this.player.animations.stop();
+
+    this.game.physics.arcade.collide(this.player, this.blockedLayer);
+
+    this.game.physics.arcade.overlap(this.player, tankers, tanker_collision_callback, null, this);
+  }
+}
 
 
+var game = new Phaser.Game(640, 400, Phaser.AUTO, '', Game.Intro);
+
+game.state.add("Play", Game.Play);
+game.state.add("Intro", Game.Intro);
 
 
 function preload() 
 {
-  this.scale.scaleMode = Phaser.ScaleManager.SHOW_ALL;
-  this.scale.pageAlignHorizontally = true;
-  this.scale.pageAlignVertically = true;
-  game.world.setBounds(0,0,5000,2000);
-  game.stage.smoothed = false;
-
-  this.game.physics.startSystem(Phaser.Physics.ARCADE);
-
-  game.load.atlasJSONHash(
-      'ytm-atlas',
-      '../assets/ytm-atlas.png',
-      '../assets/ytm-atlas.json'
-      );
-  this.load.tilemap('level1', '../levels/level1.json', null, Phaser.Tilemap.TILED_JSON);
-  this.load.image('ytm-tiles', '../assets/ytm-tiles.png');
-  this.load.audio('splash2', '../assets/splash2.mp3');
 }
 
 objects = function(type, map, layer) {
@@ -66,51 +202,6 @@ var numberOfTankers = 0;
 
 function create() 
 {
-  game.physics.startSystem(Phaser.Physics.ARCADE);
-  game.camera.roundPx = false;
-  this.game.stage.backgroundColor = '#0000CC';
-  shake = new Phaser.Plugin.Shake(game);
-  game.plugins.add(shake);
-
-  this.splash = this.add.audio('splash2');
-  this.map = this.game.add.tilemap('level1');
-  this.map.addTilesetImage('ytm-tiles', 'ytm-tiles');
-
-
-  //create layer
-  this.backgroundlayer = this.map.createLayer('backgroundLayer');
-  this.blockedLayer = this.map.createLayer('blockedLayer');
-
-  this.map.setCollisionBetween(1, 100000, true, this.blockedLayer);
-
-  tankers = this.add.group();
-  tankers.enableBody = true;
-
-  objects('Tanker', this.map, 'objectsLayer').forEach(function(tanker) {
-    var _t = tankers.create(tanker.x + 210, tanker.y - (170/2), 'ytm-atlas', 'tanker.png');
-    _t.body.immovable = true;
-    _t.body.setSize(_t.body.width, 60, 5 , 60);
-    _t.anchor.setTo(0.5);
-    numberOfTankers++;
-  });
-
-  text = game.add.text(10, 10, "Oil tankers: " + numberOfTankers, { font: "30px TheFont"} );
-  text.fixedToCamera = true;
-
-  //create player
-  var playerStart = objects('playerStart', this.map, 'objectsLayer')
-
-    this.player = this.game.add.sprite(playerStart[0].x, playerStart[0].y, 'ytm-atlas', 'iceman-front.png');
-
-  this.player.anchor.setTo(0.5);
-  this.player.animations.add('left', ['iceman-side.png', 'iceman-front.png'], 10, true);
-  this.game.physics.arcade.enable(this.player);
-
-  //the camera will follow the player in the world
-  this.game.camera.follow(this.player);
-
-  //move player with cursor keys
-  this.cursors = this.game.input.keyboard.createCursorKeys();
 }
 
 tanker_collision_callback = function(body1, arg2)
@@ -133,30 +224,9 @@ tanker_collision_callback = function(body1, arg2)
 
 function update() 
 {
-  //player movement
-  this.player.body.velocity.y = 0;
-  this.player.body.velocity.x = 0;
-
-  if(this.cursors.up.isDown) {
-    this.player.body.velocity.y -= 250;
-  }
-  else if(this.cursors.down.isDown) {
-    this.player.body.velocity.y += 250;
-  }
-  if(this.cursors.left.isDown) {
-    this.player.body.velocity.x -= 250;
-    //this.player.animations.play('left');
-  }
-  else if(this.cursors.right.isDown) {
-    this.player.body.velocity.x += 250;
-  } else
-    this.player.animations.stop();
-
-  this.game.physics.arcade.collide(this.player, this.blockedLayer);
-
-  this.game.physics.arcade.overlap(this.player, tankers, tanker_collision_callback, null, this);
 }
     </script>
 
   </body>
+
 </html>
