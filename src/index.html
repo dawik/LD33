@@ -84,7 +84,7 @@ function create()
   objects('Tanker', this.map, 'objectsLayer').forEach(function(tanker) {
     var _t = tankers.create(tanker.x + 210, tanker.y - (170/2), 'ytm-atlas', 'tanker.png');
     _t.body.immovable = true;
-    _t.body.setSize(_t.body.width, 78, 0 , 91);
+    _t.body.setSize(_t.body.width, 60, 5 , 60);
     _t.anchor.setTo(0.5);
   });
 
