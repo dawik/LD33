@@ -60,6 +60,10 @@ objects = function(type, map, layer) {
 var tankers;
 var shake;
 
+var text;
+
+var numberOfTankers = 0;
+
 function create() 
 {
   game.physics.startSystem(Phaser.Physics.ARCADE);
@@ -78,6 +82,7 @@ function create()
   this.blockedLayer = this.map.createLayer('blockedLayer');
 
   this.map.setCollisionBetween(1, 100000, true, this.blockedLayer);
+
   tankers = this.add.group();
   tankers.enableBody = true;
 
@@ -86,7 +91,11 @@ function create()
     _t.body.immovable = true;
     _t.body.setSize(_t.body.width, 60, 5 , 60);
     _t.anchor.setTo(0.5);
+    numberOfTankers++;
   });
+
+  text = game.add.text(10, 10, "Oil tankers: " + numberOfTankers, { font: "30px TheFont"} );
+  text.fixedToCamera = true;
 
   //create player
   var playerStart = objects('playerStart', this.map, 'objectsLayer')
@@ -106,7 +115,6 @@ function create()
 
 tanker_collision_callback = function(body1, arg2)
 {
-  console.log(arg2);
   if (!arg2.destruction)
   {
     arg2.destruction = true;
@@ -116,6 +124,8 @@ tanker_collision_callback = function(body1, arg2)
 
     tween.onComplete.add(function() {
       arg2.destroy(true);
+      numberOfTankers--;
+      text.text="Oil tankers: " + numberOfTankers;
     }
     );
   }
