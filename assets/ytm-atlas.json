@@ -1,0 +1,76 @@
+{"frames": {
+
+"iceberg.png":
+{
+	"frame": {"x":2,"y":186,"w":90,"h":100},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":90,"h":100},
+	"sourceSize": {"w":90,"h":100}
+},
+"iceman-front.png":
+{
+	"frame": {"x":424,"y":2,"w":50,"h":90},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":50,"h":90},
+	"sourceSize": {"w":50,"h":90}
+},
+"iceman-side.png":
+{
+	"frame": {"x":424,"y":94,"w":50,"h":90},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":50,"h":90},
+	"sourceSize": {"w":50,"h":90}
+},
+"tanker.png":
+{
+	"frame": {"x":2,"y":2,"w":420,"h":170},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":420,"h":170},
+	"sourceSize": {"w":420,"h":170}
+},
+"tile-ice1.png":
+{
+	"frame": {"x":476,"y":2,"w":32,"h":32},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":32,"h":32},
+	"sourceSize": {"w":32,"h":32}
+},
+"tile-ice2.png":
+{
+	"frame": {"x":476,"y":36,"w":32,"h":32},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":32,"h":32},
+	"sourceSize": {"w":32,"h":32}
+},
+"tile-water1.png":
+{
+	"frame": {"x":476,"y":70,"w":32,"h":32},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":32,"h":32},
+	"sourceSize": {"w":32,"h":32}
+},
+"tile-water2.png":
+{
+	"frame": {"x":476,"y":104,"w":32,"h":32},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":32,"h":32},
+	"sourceSize": {"w":32,"h":32}
+}},
+"meta": {
+	"app": "http://www.codeandweb.com/texturepacker",
+	"version": "1.0",
+	"image": "ytm-atlas.png",
+	"format": "RGBA8888",
+	"size": {"w":512,"h":512},
+	"scale": "1",
+	"smartupdate": "$TexturePacker:SmartUpdate:3c7af7590bd5015983a1c785b289b021:0ab51f4e92ca4ea3e6a6df9a82fc4d29:7b41ad325e2551badaf1359890c19ceb$"
+}
+}
