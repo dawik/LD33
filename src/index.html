@@ -35,10 +35,11 @@ function preload()
   game.load.atlasJSONHash(
       'ytm-atlas',
       '../assets/ytm-atlas.png',
-      '../assets/ytm-atlas'
+      '../assets/ytm-atlas.json'
       );
   this.load.tilemap('level1', '../levels/level1.json', null, Phaser.Tilemap.TILED_JSON);
   this.load.image('ytm-tiles', '../assets/ytm-tiles.png');
+  this.load.audio('splash2', '../assets/splash2.mp3');
 }
 
 objects = function(type, map, layer) {
@@ -53,36 +54,38 @@ objects = function(type, map, layer) {
   return result;
 };
 
-var tankers = [];
+var tankers;
 
 function create() 
 {
   game.physics.startSystem(Phaser.Physics.ARCADE);
+  game.camera.roundPx = false;
   this.game.stage.backgroundColor = '#0000CC';
+
+  this.splash = this.add.audio('splash2');
   this.map = this.game.add.tilemap('level1');
   this.map.addTilesetImage('ytm-tiles', 'ytm-tiles');
+
 
   //create layer
   this.backgroundlayer = this.map.createLayer('backgroundLayer');
   this.blockedLayer = this.map.createLayer('blockedLayer');
 
   this.map.setCollisionBetween(1, 100000, true, this.blockedLayer);
+  tankers = this.add.group();
+  tankers.enableBody = true;
 
   objects('Tanker', this.map, 'objectsLayer').forEach(function(tanker) {
-    var tankerSprite = game.add.sprite(tanker.x, tanker.y, 'ytm-atlas', 'tanker.png');
-    console.log(tankerSprite);
-    tankers.push(tankerSprite);
-  });
-
-  tankers.map(function(tanker) { 
-    //tanker.anchor.setTo(0.5);
-    tanker.y -= tanker.texture.frame.height;
+    var _t = tankers.create(tanker.x, tanker.y - (170/2), 'ytm-atlas', 'tanker.png');
+    _t.body.immovable = true;
   });
 
   //create player
   var playerStart = objects('playerStart', this.map, 'objectsLayer')
 
   this.player = this.game.add.sprite(playerStart[0].x, playerStart[0].y, 'ytm-atlas', 'iceman-front.png');
+
+  this.player_colliding = false;
   this.player.anchor.setTo(0.5);
   this.player.animations.add('left', ['iceman-side.png', 'iceman-front.png'], 10, true);
   this.game.physics.arcade.enable(this.player);
@@ -92,6 +95,13 @@ function create()
 
   //move player with cursor keys
   this.cursors = this.game.input.keyboard.createCursorKeys();
+}
+
+tanker_collision_callback = function(arg1, arg2, arg3)
+{
+  //console.log(arg1, arg2, arg3);
+  if (!this.player_colliding)
+    this.splash.play();
 }
 
 function update() 
@@ -116,7 +126,10 @@ function update()
     this.player.animations.stop();
 
   this.game.physics.arcade.collide(this.player, this.blockedLayer);
-
+  if (this.game.physics.arcade.overlap(this.player, tankers, tanker_collision_callback, null, this))
+    this.player_colliding = true;
+  else
+    this.player_colliding = false;
 }
     </script>
 
