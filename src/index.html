@@ -31,11 +31,12 @@ Game.Intro.prototype =
   {
     this.loading_text = game.add.text(0, 0, "loading...",  {fill: "#ffffff"});
     this.scale.scaleMode = Phaser.ScaleManager.SHOW_ALL;
-    this.scale.pageAlignHorizontally = true;
+    this.scale.pageAligNHorizontally = true;
     this.scale.pageAlignVertically = true;
     this.game.world.setBounds(0,0,640,400);
     this.load.image('icebergman', '../assets/icebergman-smaller.jpg');
     this.load.script('pixelate', 'https://cdn.rawgit.com/photonstorm/phaser/master/filters/Pixelate.js');
+    this.load.audio('intro', '../assets/intro.mp3');
   },
 
   create: function() 
@@ -59,6 +60,11 @@ Game.Intro.prototype =
         
       });
     });
+
+    var intro = this.game.add.audio('intro');
+
+    game.sound.setDecodedCallback(intro, function() { intro.loopFull(0.6)}, this);
+
   },
 
   update: function()
