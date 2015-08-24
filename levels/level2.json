@@ -63,6 +63,86 @@
                  "width":90,
                  "x":432,
                  "y":577
+                }, 
+                {
+                 "gid":11,
+                 "height":170,
+                 "id":8,
+                 "name":"",
+                 "properties":
+                    {
+
+                    },
+                 "rotation":0,
+                 "type":"Tanker",
+                 "visible":true,
+                 "width":420,
+                 "x":699,
+                 "y":764
+                }, 
+                {
+                 "gid":11,
+                 "height":170,
+                 "id":9,
+                 "name":"",
+                 "properties":
+                    {
+
+                    },
+                 "rotation":0,
+                 "type":"Tanker",
+                 "visible":true,
+                 "width":420,
+                 "x":484,
+                 "y":1168
+                }, 
+                {
+                 "gid":13,
+                 "height":100,
+                 "id":10,
+                 "name":"",
+                 "properties":
+                    {
+
+                    },
+                 "rotation":0,
+                 "type":"Iceberg",
+                 "visible":true,
+                 "width":90,
+                 "x":831,
+                 "y":575
+                }, 
+                {
+                 "gid":13,
+                 "height":100,
+                 "id":11,
+                 "name":"",
+                 "properties":
+                    {
+
+                    },
+                 "rotation":0,
+                 "type":"Iceberg",
+                 "visible":true,
+                 "width":90,
+                 "x":740,
+                 "y":944
+                }, 
+                {
+                 "gid":13,
+                 "height":100,
+                 "id":12,
+                 "name":"",
+                 "properties":
+                    {
+
+                    },
+                 "rotation":0,
+                 "type":"Iceberg",
+                 "visible":true,
+                 "width":90,
+                 "x":1036,
+                 "y":1147
                 }],
          "opacity":1,
          "type":"objectgroup",
@@ -82,7 +162,7 @@
          "x":0,
          "y":0
         }],
- "nextobjectid":8,
+ "nextobjectid":13,
  "orientation":"orthogonal",
  "properties":
     {

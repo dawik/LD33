@@ -75,10 +75,16 @@ Game.Intro.prototype =
     {
       if (e.keyCode == 32)
       {
-        this.game.input.keyboard.onDownCallback = undefined;
+        this.game.input.keyboard.onDownCallback = function(e)
+        {
+          if (e.keyCode == 82)
+          {
+            numberOfTankers = 0;
+            this.game.state.restart(false, true);
+          }
+        }
         intro_track.stop();
         this.game.state.start("Play", true, false);
-        //console.log(e.keyCode);
       }
     }
   }
@@ -150,14 +156,13 @@ Game.Play.prototype =
     icebergs.enableBody = true;
 
     objects('Iceberg', this.map, 'objectsLayer').forEach(function(iceberg) {
-      var _t = icebergs.create(iceberg.x + 210, iceberg.y - (170/2), 'ytm-atlas', 'iceberg.png');
-      _t.body.immovable = true;
-      //_t.body.setSize(_t.body.width, 60, 5 , 60);
-      _t.anchor.setTo(0.5);
+      var _i = icebergs.create(iceberg.x, iceberg.y, 'ytm-atlas', 'iceberg.png');
+      _i.body.immovable = false;
+      _i.body.collideWorldBounds = true;
     });
 
 
-    text = game.add.text(10, 10, "Level " + level + "\nTankers: " + numberOfTankers, { font: "30px TheFont"} );
+    text = game.add.text(10, 10, "Level " + level + "\nTankers: " + numberOfTankers + "\n'R' to restart\n", { font: "30px TheFont"} );
     text.fixedToCamera = true;
 
     //create player
@@ -254,8 +259,10 @@ Game.Play.prototype =
 
       //this.game.physics.arcade.collide(this.player, this.blockedLayer);
 
-      this.game.physics.arcade.collide(this.player, tankers, tanker_collision_callback, null, this);
+      this.game.physics.arcade.collide(this.player, tankers);
       this.game.physics.arcade.collide(this.player, icebergs);
+      this.game.physics.arcade.collide(icebergs, icebergs);
+      this.game.physics.arcade.collide(icebergs, tankers, tanker_collision_callback, null, this);
       StandingInWaterFilter.uniforms.posY.value = game.height - (this.player.position.y - game.camera.view.y);
     }
     if (numberOfTankers == 0)
@@ -290,7 +297,7 @@ tanker_collision_callback = function(body1, arg2)
     tween.onComplete.add(function() {
       arg2.destroy(true);
       numberOfTankers--;
-      text.text = "Level " + level + "\nTankers: " + numberOfTankers;
+      text.text = "Level " + level + "\nTankers: " + numberOfTankers + "\n'R' to restart\n";
     }
     );
   }
