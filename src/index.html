@@ -75,18 +75,19 @@ Game.Intro.prototype =
     {
       this.game.input.keyboard.onDownCallback = undefined;
       intro_track.stop();
-      game.state.start("Play");
-      console.log(e.keyCode);
+      this.game.state.start("Play", false, false);
+      //console.log(e.keyCode);
     }
   }
 }
+
+var level = 1, playing = false, StandingInWaterFilter, player;
 
 Game.Play.prototype = 
 {
   preload: function()
   {
-    this.loading_text = this.game.add.text(game.world.centerX, game.world.centerY, "loading...",  {fill: "#ffffff"});
-    this.loading_text.anchor.setTo(0.5);
+    this.loading_text = this.game.add.text(game.world.centerX, game.world.centerY, "loading...",  {fill: "#ffffff"}); this.loading_text.anchor.setTo(0.5);
     this.scale.scaleMode = Phaser.ScaleManager.SHOW_ALL;
     this.scale.pageAlignHorizontally = true;
     this.scale.pageAlignVertically = true;
@@ -99,10 +100,11 @@ Game.Play.prototype =
         '../assets/ytm-atlas.png',
         '../assets/ytm-atlas.json'
         );
-    this.load.tilemap('level1', '../levels/level1.json', null, Phaser.Tilemap.TILED_JSON);
+    this.load.tilemap('level' + level, '../levels/level' + level + '.json', null, Phaser.Tilemap.TILED_JSON);
     this.load.image('ytm-tiles', '../assets/ytm-tiles.png');
     this.load.audio('splash2', '../assets/splash2.mp3');
     this.load.audio('pcp', '../assets/pcp.mp3');
+    this.load.script('StandingInWater', '../src/standinginwater.js');
   },
 
   create: function() 
@@ -115,7 +117,7 @@ Game.Play.prototype =
     game.plugins.add(shake);
 
     this.splash = this.add.audio('splash2');
-    this.map = this.game.add.tilemap('level1');
+    this.map = this.game.add.tilemap('level' + level);
     this.map.addTilesetImage('ytm-tiles', 'ytm-tiles');
 
     //create layer
@@ -139,30 +141,39 @@ Game.Play.prototype =
       numberOfTankers++;
     });
 
-    text = game.add.text(10, 10, "Oil tankers: " + numberOfTankers, { font: "30px TheFont"} );
+    text = game.add.text(10, 10, "Tankers: " + numberOfTankers, { font: "30px TheFont"} );
     text.fixedToCamera = true;
 
     //create player
     var playerStart = objects('playerStart', this.map, 'objectsLayer')
 
-      this.player = this.game.add.sprite(playerStart[0].x, playerStart[0].y, 'ytm-atlas', 'iceman-front.png');
+    player = this.game.add.sprite(playerStart[0].x, playerStart[0].y, 'ytm-atlas', 'iceman-front.png');
 
-    this.player.anchor.setTo(0.5);
-    this.player.animations.add('left', ['iceman-side.png', 'iceman-front.png'], 10, true);
-    this.game.physics.arcade.enable(this.player);
+    player.anchor.setTo(0.5);
+    player.animations.add('left', ['iceman-side.png', 'iceman-front.png'], 10, true);
+    this.game.physics.arcade.enable(player);
 
-    this.player.body.collideWorldBounds = true;
+    player.body.collideWorldBounds = true;
 
     //the camera will follow the player in the world
-    this.game.camera.follow(this.player);
+    this.game.camera.follow(player);
+
+    StandingInWaterFilter = game.add.filter('StandingInWater');
+
+    console.log(StandingInWaterFilter);
+    console.log(Phaser.Filter.StandingInWater);
+
+    player.filters = [StandingInWaterFilter];
 
     //move player with cursor keys
     this.cursors = this.game.input.keyboard.createCursorKeys();
 
-    var pcp = game.add.audio('pcp');
+    pcp = game.add.audio('pcp');
 
     function start() {
-      pcp.loopFull(0.6);
+      if (!playing)
+        pcp.loopFull(0.6);
+        playing = true;
     }
 
     game.sound.setDecodedCallback(pcp, start, this);
@@ -171,27 +182,33 @@ Game.Play.prototype =
   update: function()
   {
     //player movement
-    this.player.body.velocity.y = 0;
-    this.player.body.velocity.x = 0;
+    player.body.velocity.y = 0;
+    player.body.velocity.x = 0;
 
     if(this.cursors.up.isDown) {
-      this.player.body.velocity.y -= 250;
+      player.body.velocity.y -= 250;
     }
     else if(this.cursors.down.isDown) {
-      this.player.body.velocity.y += 250;
+      player.body.velocity.y += 250;
     }
     if(this.cursors.left.isDown) {
-      this.player.body.velocity.x -= 250;
-      //this.player.animations.play('left');
+      player.body.velocity.x -= 250;
+      //player.animations.play('left');
     }
     else if(this.cursors.right.isDown) {
-      this.player.body.velocity.x += 250;
+      player.body.velocity.x += 250;
     } else
-      this.player.animations.stop();
+      player.animations.stop();
 
-    this.game.physics.arcade.collide(this.player, this.blockedLayer);
+    this.game.physics.arcade.collide(player, this.blockedLayer);
 
-    this.game.physics.arcade.overlap(this.player, tankers, tanker_collision_callback, null, this);
+    this.game.physics.arcade.overlap(player, tankers, tanker_collision_callback, null, this);
+    if (numberOfTankers == 0)
+    {
+      //level++;
+      this.game.state.restart(false, false);
+    }
+    StandingInWaterFilter.uniforms.posY.value = -((player.position.y - game.camera.view.y)));
   }
 }
 
@@ -201,9 +218,22 @@ var game = new Phaser.Game(640, 400, Phaser.AUTO, '', Game.Intro);
 game.state.add("Play", Game.Play);
 game.state.add("Intro", Game.Intro);
 
-
-function preload() 
+tanker_collision_callback = function(body1, arg2)
 {
+  if (!arg2.destruction)
+  {
+    arg2.destruction = true;
+    this.splash.play();
+    var tween = game.add.tween(arg2).to({ angle: -5, y: arg2.body.y - 25}, 1000, "Quart.easeOut", true);
+    shake.shake(20, arg2);
+
+    tween.onComplete.add(function() {
+      arg2.destroy(true);
+      numberOfTankers--;
+      text.text="Tankers: " + numberOfTankers;
+    }
+    );
+  }
 }
 
 objects = function(type, map, layer) {
@@ -225,31 +255,6 @@ var text;
 
 var numberOfTankers = 0;
 
-function create() 
-{
-}
-
-tanker_collision_callback = function(body1, arg2)
-{
-  if (!arg2.destruction)
-  {
-    arg2.destruction = true;
-    this.splash.play();
-    var tween = game.add.tween(arg2).to({ angle: -5, y: arg2.body.y - 25}, 1000, "Quart.easeOut", true);
-    shake.shake(20, arg2);
-
-    tween.onComplete.add(function() {
-      arg2.destroy(true);
-      numberOfTankers--;
-      text.text="Oil tankers: " + numberOfTankers;
-    }
-    );
-  }
-}
-
-function update() 
-{
-}
     </script>
 
   </body>
