@@ -159,6 +159,8 @@ Game.Play.prototype =
       var _i = icebergs.create(iceberg.x, iceberg.y, 'ytm-atlas', 'iceberg.png');
       _i.body.immovable = false;
       _i.body.collideWorldBounds = true;
+      _i.body.drag.x = 25;
+      _i.body.drag.y = 25;
     });
 
 
@@ -294,10 +296,10 @@ tanker_collision_callback = function(b1, b2)
 
     b2.loadTexture('ytm-atlas', 'tanker-broken.png');
 
-    b1.destroy(true);
+    b1.kill(true);
 
     tween.onComplete.add(function() {
-      b2.destroy(true);
+      b2.kill(true);
       numberOfTankers--;
       text.text = "Level " + level + "\nTankers: " + numberOfTankers + "\n'R' to restart\n";
     }
