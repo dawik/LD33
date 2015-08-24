@@ -90,7 +90,7 @@ Game.Intro.prototype =
   }
 }
 
-var level = 1, playing = false, StandingInWaterFilter;
+var level = 4, playing = false, StandingInWaterFilter;
 
 Game.Play.prototype = 
 {
@@ -112,6 +112,8 @@ Game.Play.prototype =
     this.load.tilemap('level1', '../levels/level1.json', null, Phaser.Tilemap.TILED_JSON);
     this.load.tilemap('level2', '../levels/level2.json', null, Phaser.Tilemap.TILED_JSON);
     this.load.tilemap('level3', '../levels/level3.json', null, Phaser.Tilemap.TILED_JSON);
+    this.load.tilemap('level4', '../levels/level4.json', null, Phaser.Tilemap.TILED_JSON);
+    this.load.tilemap('level5', '../levels/level5.json', null, Phaser.Tilemap.TILED_JSON);
     this.load.image('ytm-tiles', '../assets/ytm-tiles.png');
     this.load.audio('splash2', '../assets/splash2.mp3');
     this.load.audio('pcp', '../assets/pcp.mp3');
@@ -149,19 +151,23 @@ Game.Play.prototype =
       _t.body.setSize(_t.body.width, 60, 5 , 60);
       _t.anchor.setTo(0.5);
       numberOfTankers++;
-      console.log("TANKER");
     });
 
     icebergs = this.add.group();
     icebergs.enableBody = true;
 
     objects('Iceberg', this.map, 'objectsLayer').forEach(function(iceberg) {
-      var _i = icebergs.create(iceberg.x, iceberg.y, 'ytm-atlas', 'iceberg.png');
+      var _i = icebergs.create(iceberg.x, iceberg.y, 'ytm-atlas', 'iceberg-1.png');
       _i.body.immovable = false;
       _i.body.collideWorldBounds = true;
+      _i.anchor.setTo(0.5);
       _i.body.drag.x = 25;
       _i.body.drag.y = 25;
     });
+    icebergs.callAll('animations.add', 'animations', 'float', ['iceberg-1.png', 'iceberg-2.png'], 1, true);
+
+    //  And play them
+    icebergs.callAll('animations.play', 'animations', 'float');  
 
 
     text = game.add.text(10, 10, "Level " + level + "\nTankers: " + numberOfTankers + "\n'R' to restart\n", { font: "30px TheFont"} );
@@ -270,10 +276,12 @@ Game.Play.prototype =
     if (numberOfTankers == 0)
     {
       level++;
-      if (level > 3)
+      if (level > 5)
       {
-        level = 1;
-      }
+        var text = this.game.add.text(320, 200, "Congratulations\n You beat the game!\n",  {fill: "#000000", align:"center"});
+       text.fixedToCamera = true;
+       text.anchor.setTo(0.5);
+      } else
       this.game.state.restart(false, true);
     }
   }

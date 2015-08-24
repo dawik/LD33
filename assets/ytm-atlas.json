@@ -1,12 +1,20 @@
 {"frames": {
 
-"iceberg.png":
+"iceberg-1.png":
 {
 	"frame": {"x":2,"y":370,"w":90,"h":100},
 	"rotated": false,
-	"trimmed": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":0,"y":5,"w":90,"h":100},
+	"sourceSize": {"w":90,"h":105}
+},
+"iceberg-2.png":
+{
+	"frame": {"x":2,"y":370,"w":90,"h":100},
+	"rotated": false,
+	"trimmed": true,
 	"spriteSourceSize": {"x":0,"y":0,"w":90,"h":100},
-	"sourceSize": {"w":90,"h":100}
+	"sourceSize": {"w":90,"h":105}
 },
 "iceman-back-1.png":
 {
@@ -127,6 +135,6 @@
 	"format": "RGBA8888",
 	"size": {"w":512,"h":512},
 	"scale": "1",
-	"smartupdate": "$TexturePacker:SmartUpdate:c757c7fff071466547b58e75b92dc8c6:90af78ef418c518122e38d850e2ec175:7b41ad325e2551badaf1359890c19ceb$"
+	"smartupdate": "$TexturePacker:SmartUpdate:9d5ae3a0fde060f657de079a51920c69:689c1f712f1038fe143b93f5ea071cfb:7b41ad325e2551badaf1359890c19ceb$"
 }
 }
