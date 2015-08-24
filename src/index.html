@@ -283,19 +283,21 @@ var game = new Phaser.Game(640, 400, Phaser.AUTO, '', Game.Intro);
 game.state.add("Play", Game.Play);
 game.state.add("Intro", Game.Intro);
 
-tanker_collision_callback = function(body1, arg2)
+tanker_collision_callback = function(b1, b2)
 {
-  if (!arg2.destruction)
+  if (!b2.destruction)
   {
-    arg2.destruction = true;
+    b2.destruction = true;
     this.splash.play();
-    var tween = game.add.tween(arg2).to({ angle: -5, y: arg2.body.y - 25}, 500, "Quart.easeOut", true);
+    var tween = game.add.tween(b2).to({ angle: -5, y: b2.body.y - 25}, 500, "Quart.easeOut", true);
     shake.shake(20);
 
-    arg2.loadTexture('ytm-atlas', 'tanker-broken.png');
+    b2.loadTexture('ytm-atlas', 'tanker-broken.png');
+
+    b1.destroy(true);
 
     tween.onComplete.add(function() {
-      arg2.destroy(true);
+      b2.destroy(true);
       numberOfTankers--;
       text.text = "Level " + level + "\nTankers: " + numberOfTankers + "\n'R' to restart\n";
     }
