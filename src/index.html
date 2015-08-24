@@ -57,7 +57,7 @@ Game.Intro.prototype =
       text.alpha = 0.1;
       var text_tween = game.add.tween(text).to({ alpha: 1}, 4000, "Linear", true );
       text_tween.onComplete.add(function() {
-        var start_text = game.add.text(320,300, "Use arrow keys to control Is-O\nPress any key to begin", { fill: "#ffffff", align:"center"});
+        var start_text = game.add.text(320,300, "Use arrow keys to control Is-O\nPress SPACE to begin", { fill: "#ffffff", align:"center"});
         start_text.anchor.setTo(0.5);
         
       });
@@ -73,10 +73,13 @@ Game.Intro.prototype =
   {
     this.game.input.keyboard.onDownCallback = function(e)
     {
-      this.game.input.keyboard.onDownCallback = undefined;
-      intro_track.stop();
-      this.game.state.start("Play", false, false);
-      //console.log(e.keyCode);
+      if (e.keyCode == 32)
+      {
+        this.game.input.keyboard.onDownCallback = undefined;
+        intro_track.stop();
+        this.game.state.start("Play", true, false);
+        //console.log(e.keyCode);
+      }
     }
   }
 }
@@ -147,10 +150,14 @@ Game.Play.prototype =
     //create player
     var playerStart = objects('playerStart', this.map, 'objectsLayer')
 
-    player = this.game.add.sprite(playerStart[0].x, playerStart[0].y, 'ytm-atlas', 'iceman-front.png');
+    player = this.game.add.sprite(playerStart[0].x, playerStart[0].y, 'ytm-atlas', 'iceman-front-1.png');
 
     player.anchor.setTo(0.5);
-    player.animations.add('left', ['iceman-side.png', 'iceman-front.png'], 10, true);
+    player.animations.add('left', ['iceman-left-1.png', 'iceman-left-2.png'], 5, true);
+    player.animations.add('right', ['iceman-right-1.png', 'iceman-right-2.png'], 5, true);
+    player.animations.add('back', ['iceman-back-1.png', 'iceman-back-2.png'], 5, true);
+    player.animations.add('front', ['iceman-front-1.png', 'iceman-front-2.png'], 5, true);
+    player.animations.play('front');
     this.game.physics.arcade.enable(player);
 
     player.body.collideWorldBounds = true;
@@ -173,7 +180,7 @@ Game.Play.prototype =
     function start() {
       if (!playing)
         pcp.loopFull(0.6);
-        playing = true;
+      playing = true;
     }
 
     game.sound.setDecodedCallback(pcp, start, this);
@@ -193,22 +200,33 @@ Game.Play.prototype =
     }
     if(this.cursors.left.isDown) {
       player.body.velocity.x -= 250;
-      //player.animations.play('left');
     }
     else if(this.cursors.right.isDown) {
       player.body.velocity.x += 250;
-    } else
-      player.animations.stop();
+    }
+
+    if(this.cursors.up.isDown) {
+      player.animations.play('back');
+    }
+    else if(this.cursors.down.isDown) {
+      player.animations.play('front');
+    }
+    else if(this.cursors.left.isDown) {
+      player.animations.play('left');
+    }
+    else if(this.cursors.right.isDown) {
+      player.animations.play('right');
+    }
 
     this.game.physics.arcade.collide(player, this.blockedLayer);
 
-    this.game.physics.arcade.overlap(player, tankers, tanker_collision_callback, null, this);
+    this.game.physics.arcade.collide(player, tankers, tanker_collision_callback, null, this);
     if (numberOfTankers == 0)
     {
       //level++;
       this.game.state.restart(false, false);
     }
-    StandingInWaterFilter.uniforms.posY.value = (player.position.y - game.camera.view.y);
+    StandingInWaterFilter.uniforms.posY.value = game.height - (player.position.y - game.camera.view.y);
   }
 }
 

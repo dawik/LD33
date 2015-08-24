@@ -8,7 +8,7 @@
 	"spriteSourceSize": {"x":0,"y":0,"w":90,"h":100},
 	"sourceSize": {"w":90,"h":100}
 },
-"iceman-front.png":
+"iceman-back-1.png":
 {
 	"frame": {"x":424,"y":2,"w":50,"h":90},
 	"rotated": false,
@@ -16,9 +16,57 @@
 	"spriteSourceSize": {"x":0,"y":0,"w":50,"h":90},
 	"sourceSize": {"w":50,"h":90}
 },
-"iceman-side.png":
+"iceman-back-2.png":
 {
 	"frame": {"x":424,"y":94,"w":50,"h":90},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":50,"h":90},
+	"sourceSize": {"w":50,"h":90}
+},
+"iceman-front-1.png":
+{
+	"frame": {"x":2,"y":288,"w":50,"h":90},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":50,"h":90},
+	"sourceSize": {"w":50,"h":90}
+},
+"iceman-front-2.png":
+{
+	"frame": {"x":2,"y":380,"w":50,"h":90},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":50,"h":90},
+	"sourceSize": {"w":50,"h":90}
+},
+"iceman-left-1.png":
+{
+	"frame": {"x":54,"y":288,"w":50,"h":90},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":50,"h":90},
+	"sourceSize": {"w":50,"h":90}
+},
+"iceman-left-2.png":
+{
+	"frame": {"x":94,"y":186,"w":50,"h":90},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":50,"h":90},
+	"sourceSize": {"w":50,"h":90}
+},
+"iceman-right-1.png":
+{
+	"frame": {"x":54,"y":380,"w":50,"h":90},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":50,"h":90},
+	"sourceSize": {"w":50,"h":90}
+},
+"iceman-right-2.png":
+{
+	"frame": {"x":106,"y":278,"w":50,"h":90},
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":50,"h":90},
@@ -71,6 +119,6 @@
 	"format": "RGBA8888",
 	"size": {"w":512,"h":512},
 	"scale": "1",
-	"smartupdate": "$TexturePacker:SmartUpdate:3c7af7590bd5015983a1c785b289b021:0ab51f4e92ca4ea3e6a6df9a82fc4d29:7b41ad325e2551badaf1359890c19ceb$"
+	"smartupdate": "$TexturePacker:SmartUpdate:178d006765d6a6a1f80770f236f09003:9d54eb46b553cee15305ea773ed99e4c:7b41ad325e2551badaf1359890c19ceb$"
 }
 }
