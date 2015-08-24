@@ -2,7 +2,7 @@
 
 "iceberg.png":
 {
-	"frame": {"x":2,"y":186,"w":90,"h":100},
+	"frame": {"x":2,"y":370,"w":90,"h":100},
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":90,"h":100},
@@ -10,7 +10,7 @@
 },
 "iceman-back-1.png":
 {
-	"frame": {"x":424,"y":2,"w":50,"h":90},
+	"frame": {"x":438,"y":2,"w":50,"h":90},
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":50,"h":90},
@@ -18,7 +18,7 @@
 },
 "iceman-back-2.png":
 {
-	"frame": {"x":424,"y":94,"w":50,"h":90},
+	"frame": {"x":438,"y":94,"w":50,"h":90},
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":50,"h":90},
@@ -26,7 +26,7 @@
 },
 "iceman-front-1.png":
 {
-	"frame": {"x":2,"y":288,"w":50,"h":90},
+	"frame": {"x":424,"y":186,"w":50,"h":90},
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":50,"h":90},
@@ -34,7 +34,7 @@
 },
 "iceman-front-2.png":
 {
-	"frame": {"x":2,"y":380,"w":50,"h":90},
+	"frame": {"x":424,"y":278,"w":50,"h":90},
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":50,"h":90},
@@ -42,7 +42,7 @@
 },
 "iceman-left-1.png":
 {
-	"frame": {"x":54,"y":288,"w":50,"h":90},
+	"frame": {"x":94,"y":370,"w":50,"h":90},
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":50,"h":90},
@@ -50,7 +50,7 @@
 },
 "iceman-left-2.png":
 {
-	"frame": {"x":94,"y":186,"w":50,"h":90},
+	"frame": {"x":146,"y":370,"w":50,"h":90},
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":50,"h":90},
@@ -58,7 +58,7 @@
 },
 "iceman-right-1.png":
 {
-	"frame": {"x":54,"y":380,"w":50,"h":90},
+	"frame": {"x":198,"y":370,"w":50,"h":90},
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":50,"h":90},
@@ -66,15 +66,23 @@
 },
 "iceman-right-2.png":
 {
-	"frame": {"x":106,"y":278,"w":50,"h":90},
+	"frame": {"x":250,"y":370,"w":50,"h":90},
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":50,"h":90},
 	"sourceSize": {"w":50,"h":90}
 },
+"tanker-broken.png":
+{
+	"frame": {"x":2,"y":2,"w":434,"h":169},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":34,"y":19,"w":434,"h":169},
+	"sourceSize": {"w":500,"h":200}
+},
 "tanker.png":
 {
-	"frame": {"x":2,"y":2,"w":420,"h":170},
+	"frame": {"x":2,"y":173,"w":420,"h":170},
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":420,"h":170},
@@ -82,7 +90,7 @@
 },
 "tile-ice1.png":
 {
-	"frame": {"x":476,"y":2,"w":32,"h":32},
+	"frame": {"x":476,"y":186,"w":32,"h":32},
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":32,"h":32},
@@ -90,7 +98,7 @@
 },
 "tile-ice2.png":
 {
-	"frame": {"x":476,"y":36,"w":32,"h":32},
+	"frame": {"x":476,"y":220,"w":32,"h":32},
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":32,"h":32},
@@ -98,7 +106,7 @@
 },
 "tile-water1.png":
 {
-	"frame": {"x":476,"y":70,"w":32,"h":32},
+	"frame": {"x":476,"y":254,"w":32,"h":32},
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":32,"h":32},
@@ -106,7 +114,7 @@
 },
 "tile-water2.png":
 {
-	"frame": {"x":476,"y":104,"w":32,"h":32},
+	"frame": {"x":476,"y":288,"w":32,"h":32},
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":32,"h":32},
@@ -119,6 +127,6 @@
 	"format": "RGBA8888",
 	"size": {"w":512,"h":512},
 	"scale": "1",
-	"smartupdate": "$TexturePacker:SmartUpdate:178d006765d6a6a1f80770f236f09003:9d54eb46b553cee15305ea773ed99e4c:7b41ad325e2551badaf1359890c19ceb$"
+	"smartupdate": "$TexturePacker:SmartUpdate:c757c7fff071466547b58e75b92dc8c6:90af78ef418c518122e38d850e2ec175:7b41ad325e2551badaf1359890c19ceb$"
 }
 }

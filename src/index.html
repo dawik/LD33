@@ -243,7 +243,9 @@ tanker_collision_callback = function(body1, arg2)
     arg2.destruction = true;
     this.splash.play();
     var tween = game.add.tween(arg2).to({ angle: -5, y: arg2.body.y - 25}, 1000, "Quart.easeOut", true);
-    shake.shake(20, arg2);
+    shake.shake(20);
+
+    arg2.loadTexture('ytm-atlas', 'tanker-broken.png');
 
     tween.onComplete.add(function() {
       arg2.destroy(true);
