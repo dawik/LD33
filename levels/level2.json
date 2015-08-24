@@ -45,8 +45,24 @@
                  "type":"Tanker",
                  "visible":true,
                  "width":420,
-                 "x":440,
-                 "y":641
+                 "x":415,
+                 "y":315
+                }, 
+                {
+                 "gid":13,
+                 "height":100,
+                 "id":7,
+                 "name":"",
+                 "properties":
+                    {
+
+                    },
+                 "rotation":0,
+                 "type":"Iceberg",
+                 "visible":true,
+                 "width":90,
+                 "x":432,
+                 "y":577
                 }],
          "opacity":1,
          "type":"objectgroup",
@@ -66,7 +82,7 @@
          "x":0,
          "y":0
         }],
- "nextobjectid":7,
+ "nextobjectid":8,
  "orientation":"orthogonal",
  "properties":
     {
@@ -100,7 +116,7 @@
 
             },
          "spacing":0,
-         "tilecount":3,
+         "tilecount":4,
          "tileheight":170,
          "tiles":
             {
@@ -114,7 +130,11 @@
                 },
              "2":
                 {
-                 "image":"..\/assets\/looseys\/tile-water2.png"
+                 "image":"..\/assets\/looseys\/iceberg.png"
+                },
+             "3":
+                {
+                 "image":"..\/assets\/looseys\/iceberg.png"
                 }
             },
          "tilewidth":420
